@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Weather App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        
+        .container {
+            text-align: center;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        h1 {
+            font-size: 28px;
+        }
+        
+        .search-box {
+            margin: 20px 0;
+        }
+        
+        input[type="text"] {
+            padding: 10px;
+            width: 200px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        
+        button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .weather-info {
+            display: none;
+            margin-top: 20px;
+        }
+        
+        .location {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .temperature {
+            font-size: 36px;
+            margin-top: 10px;
+        }
+        
+        .description {
+            font-size: 18px;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Weather App</h1>
+        <div class="search-box">
+            <input type="text" id="city-input" placeholder="Enter city">
+            <button id="search-button">Search</button>
+        </div>
+        <div class="weather-info">
+            <div class="location" id="location"></div>
+            <div class="temperature" id="temperature"></div>
+            <div class="description" id="description"></div>
+        </div>
+    </div>
+    <script>
+        const apiKey = '8ce376462c694608168d39ea50b6e6ab'; 
+
+document.getElementById('search-button').addEventListener('click', () => {
+    const city = document.getElementById('city-input').value;
+    fetchWeather(city);
+});
+
+function fetchWeather(city) {
+    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`)
+        .then(response => response.json())
+        .then(data => {
+            displayWeather(data);
+        })
+        .catch(error => {
+            console.error('Error fetching weather data:', error);
+        });
+}
+
+function displayWeather(data) {
+    const location = document.getElementById('location');
+    const temperature = document.getElementById('temperature');
+    const description = document.getElementById('description');
+
+    location.textContent = data.name + ', ' + data.sys.country;
+    temperature.textContent = data.main.temp + '°C';
+    description.textContent = data.weather[0].description;
+
+    document.querySelector('.weather-info').style.display = 'block';
+}
+
+    </script>
+</body>
+</html>
